@@ -1,17 +1,89 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "defaultProject": "cool-radio",
   "newProjectRoot": "projects",
   "projects": {
     "cool-radio": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss",
-          "skipTests": true
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "maximumError": "5mb",
+                  "maximumWarning": "2mb",
+                  "type": "initial"
+                },
+                {
+                  "maximumError": "10kb",
+                  "maximumWarning": "6kb",
+                  "type": "anyComponentStyle"
+                }
+              ],
+              "buildOptimizer": true,
+              "extractCss": true,
+              "extractLicenses": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "namedChunks": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "vendorChunk": false
+            }
+          },
+          "options": {
+            "aot": true,
+            "assets": ["src/favicon.ico", "src/assets"],
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "outputPath": "dist/cool-radio",
+            "polyfills": "src/polyfills.ts",
+            "scripts": [],
+            "styles": ["src/assets/styles/main.scss"],
+            "tsConfig": "tsconfig.app.json"
+          }
         },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "cool-radio:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "exclude": ["**/node_modules/**"],
+            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"]
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "cool-radio:build:production"
+            }
+          },
+          "options": {
+            "browserTarget": "cool-radio:build"
+          }
+        }
+      },
+      "prefix": "gg",
+      "projectType": "application",
+      "root": "",
+      "schematics": {
         "@schematics/angular:class": {
           "skipTests": true
+        },
+        "@schematics/angular:component": {
+          "skipTests": true,
+          "style": "scss"
         },
         "@schematics/angular:directive": {
           "skipTests": true
@@ -32,119 +104,8 @@
           "skipTests": true
         }
       },
-      "root": "",
-      "sourceRoot": "src",
-      "prefix": "gg",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/cool-radio",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "cool-radio:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "cool-radio:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "cool-radio:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "cool-radio:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "cool-radio:serve:production"
-            }
-          }
-        }
-      }
-    }},
-  "defaultProject": "cool-radio"
+      "sourceRoot": "src"
+    }
+  },
+  "version": 1
 }
